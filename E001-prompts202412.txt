@@ -1,0 +1,8 @@
+Prompt 01:
+
+Deeply think and teach me about 
+
+Explain it to me in around 75 lines, structure them as short numbered bullets & code snippets not line numbers
+
+Explain Like I am 15 using Barabara Minto's Pyramid Principle
+
