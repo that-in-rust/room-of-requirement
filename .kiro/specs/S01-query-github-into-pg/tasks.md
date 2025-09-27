@@ -7,14 +7,14 @@
   - Create basic project structure (src/main.rs, src/lib.rs)
   - _Requirements: 1.1, 1.4_
 
-- [-] 2. Define core data models and error types
+- [x] 2. Define core data models and error types
   - Create Repository struct matching GitHub API response
   - Define comprehensive error hierarchy with thiserror
   - Implement serialization/deserialization with serde
   - Add validation for repository data
   - _Requirements: 1.1, 1.2, 1.5_
 
-- [ ] 3. Implement GitHub API client
+- [-] 3. Implement GitHub API client
   - Create GitHubClient struct with authentication
   - Add search_repositories method accepting any valid query
   - Implement rate limiting and retry logic with exponential backoff
