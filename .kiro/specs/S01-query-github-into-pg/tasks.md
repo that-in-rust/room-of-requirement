@@ -31,7 +31,7 @@
   - Add database integration tests
   - _Requirements: 1.2, 1.3_
 
-- [-] 5. Build CLI interface and argument parsing
+- [ ] 5. Build CLI interface and argument parsing
   - Create CLI struct with clap for argument parsing
   - Add search query parameter and validation
   - Implement environment variable validation (GITHUB_TOKEN, DATABASE_URL)
