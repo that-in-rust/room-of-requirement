@@ -153,6 +153,11 @@ script_temp/
 *.dump
 pg_dump_*
 database_backup*
+backup_*.sql
+
+# Docker volumes and data
+postgres_data/
+docker-data/
 
 # Data exports and imports
 data_export/

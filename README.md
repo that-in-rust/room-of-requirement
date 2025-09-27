@@ -40,10 +40,33 @@ cargo build --release
    - Generate a new token with `public_repo` scope
    - Copy the token
 
-2. **Set Environment Variables**:
+2. **Set Up Local Database** (Choose one option):
+
+   **Option A: Docker (Recommended - Easiest)**
    ```bash
+   # Run the setup script
+   ./scripts/setup-local-db.sh
+   ```
+
+   **Option B: Native PostgreSQL (macOS)**
+   ```bash
+   # Install and configure PostgreSQL via Homebrew
+   ./scripts/setup-native-postgres.sh
+   ```
+
+   **Option C: Manual Setup**
+   ```bash
+   # Install PostgreSQL, then:
+   createdb github_pg_query
+   psql postgres -c "CREATE USER github_user WITH PASSWORD 'secure_password';"
+   psql postgres -c "GRANT ALL PRIVILEGES ON DATABASE github_pg_query TO github_user;"
+   ```
+
+3. **Set Environment Variables**:
+   ```bash
+   # The setup scripts create a .env file, or set manually:
    export GITHUB_TOKEN="your_github_token_here"
-   export DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
+   export DATABASE_URL="postgresql://github_user:secure_password@localhost:5432/github_pg_query"
    ```
 
 3. **Test Configuration**:
