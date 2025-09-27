@@ -37,7 +37,8 @@ impl DatabaseManager {
 
     /// Create the query_history table if it doesn't exist
     async fn initialize_query_history_table(&self) -> Result<()> {
-        let sql = r#"
+        // Create the table
+        let create_table_sql = r#"
             CREATE TABLE IF NOT EXISTS query_history (
                 id UUID PRIMARY KEY,
                 search_query TEXT NOT NULL,
@@ -47,24 +48,35 @@ impl DatabaseManager {
                 duration_ms BIGINT NOT NULL DEFAULT 0,
                 success BOOLEAN NOT NULL DEFAULT FALSE,
                 error_message TEXT
-            );
-            
-            CREATE INDEX IF NOT EXISTS idx_query_history_executed_at ON query_history(executed_at);
-            CREATE INDEX IF NOT EXISTS idx_query_history_table_name ON query_history(table_name);
-            CREATE INDEX IF NOT EXISTS idx_query_history_success ON query_history(success);
+            )
         "#;
 
-        sqlx::query(sql)
+        sqlx::query(create_table_sql)
             .execute(&self.pool)
             .await
             .map_err(|e| AppError::table_creation("query_history", e.to_string()))?;
+
+        // Create indexes separately
+        let indexes = [
+            "CREATE INDEX IF NOT EXISTS idx_query_history_executed_at ON query_history(executed_at)",
+            "CREATE INDEX IF NOT EXISTS idx_query_history_table_name ON query_history(table_name)",
+            "CREATE INDEX IF NOT EXISTS idx_query_history_success ON query_history(success)",
+        ];
+
+        for index_sql in indexes {
+            sqlx::query(index_sql)
+                .execute(&self.pool)
+                .await
+                .map_err(|e| AppError::table_creation("query_history", e.to_string()))?;
+        }
 
         Ok(())
     }
 
     /// Create a dynamic table for storing repository data
     pub async fn create_repository_table(&self, table_name: &str) -> Result<()> {
-        let sql = format!(
+        // Create the table first
+        let create_table_sql = format!(
             r#"
             CREATE TABLE IF NOT EXISTS {} (
                 id SERIAL PRIMARY KEY,
@@ -107,28 +119,32 @@ impl DatabaseManager {
                 has_pages BOOLEAN NOT NULL DEFAULT FALSE,
                 has_downloads BOOLEAN NOT NULL DEFAULT FALSE,
                 fetched_at TIMESTAMPTZ DEFAULT NOW()
-            );
-            
-            CREATE INDEX IF NOT EXISTS idx_{}_github_id ON {}(github_id);
-            CREATE INDEX IF NOT EXISTS idx_{}_full_name ON {}(full_name);
-            CREATE INDEX IF NOT EXISTS idx_{}_language ON {}(language);
-            CREATE INDEX IF NOT EXISTS idx_{}_stargazers ON {}(stargazers_count DESC);
-            CREATE INDEX IF NOT EXISTS idx_{}_created_at ON {}(created_at);
-            CREATE INDEX IF NOT EXISTS idx_{}_owner_login ON {}(owner_login);
+            )
             "#,
-            table_name,
-            table_name, table_name,
-            table_name, table_name,
-            table_name, table_name,
-            table_name, table_name,
-            table_name, table_name,
-            table_name, table_name
+            table_name
         );
 
-        sqlx::query(&sql)
+        sqlx::query(&create_table_sql)
             .execute(&self.pool)
             .await
             .map_err(|e| AppError::table_creation(table_name, e.to_string()))?;
+
+        // Create indexes separately
+        let indexes = [
+            format!("CREATE INDEX IF NOT EXISTS idx_{}_github_id ON {}(github_id)", table_name, table_name),
+            format!("CREATE INDEX IF NOT EXISTS idx_{}_full_name ON {}(full_name)", table_name, table_name),
+            format!("CREATE INDEX IF NOT EXISTS idx_{}_language ON {}(language)", table_name, table_name),
+            format!("CREATE INDEX IF NOT EXISTS idx_{}_stargazers ON {}(stargazers_count DESC)", table_name, table_name),
+            format!("CREATE INDEX IF NOT EXISTS idx_{}_created_at ON {}(created_at)", table_name, table_name),
+            format!("CREATE INDEX IF NOT EXISTS idx_{}_owner_login ON {}(owner_login)", table_name, table_name),
+        ];
+
+        for index_sql in indexes {
+            sqlx::query(&index_sql)
+                .execute(&self.pool)
+                .await
+                .map_err(|e| AppError::table_creation(table_name, e.to_string()))?;
+        }
 
         Ok(())
     }
