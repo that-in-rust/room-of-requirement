@@ -594,6 +594,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "clap",
+ "fastrand",
  "reqwest",
  "serde",
  "serde_json",

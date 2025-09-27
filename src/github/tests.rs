@@ -164,9 +164,8 @@ mod unit_tests {
 
     #[test]
     fn test_mock_server_creation() {
-        let server = MockGitHubServer::new();
-        // Just test that we can create the server
-        assert!(true);
+        let _server = MockGitHubServer::new();
+        // Just test that we can create the server without panicking
     }
 
     #[test]
