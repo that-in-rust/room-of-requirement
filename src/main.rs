@@ -6,6 +6,8 @@ use std::time::Instant;
 
 #[tokio::main]
 async fn main() {
+    // Load environment variables from .env file if it exists
+    dotenv::dotenv().ok();
     // Parse CLI arguments and validate configuration
     let config = match CliConfig::parse() {
         Ok(config) => config,

@@ -31,7 +31,7 @@
   - Add database integration tests
   - _Requirements: 1.2, 1.3_
 
-- [ ] 5. Build CLI interface and argument parsing
+- [x] 5. Build CLI interface and argument parsing
   - Create CLI struct with clap for argument parsing
   - Add search query parameter and validation
   - Implement environment variable validation (GITHUB_TOKEN, DATABASE_URL)
@@ -39,7 +39,7 @@
   - Handle and display errors with actionable messages
   - _Requirements: 3.1, 3.2, 3.3_
 
-- [ ] 6. Integrate components and implement main workflow
+- [x] 6. Integrate components and implement main workflow
   - Connect GitHub client, database operations, and CLI
   - Implement complete search-to-storage workflow
   - Add query metadata tracking in query_history table
@@ -47,7 +47,7 @@
   - Handle graceful shutdown and cleanup
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3_
 
-- [ ] 7. Add comprehensive testing suite
+- [-] 7. Add comprehensive testing suite
   - Write unit tests for all modules with proper mocking
   - Create integration tests for database operations
   - Add end-to-end CLI tests with test containers
