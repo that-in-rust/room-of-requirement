@@ -182,7 +182,7 @@ impl GitHubClient {
             if let Ok(reset_str) = reset_header.to_str() {
                 if let Ok(reset_timestamp) = reset_str.parse::<i64>() {
                     let reset_time = chrono::DateTime::from_timestamp(reset_timestamp, 0)
-                        .unwrap_or_else(|| chrono::Utc::now());
+                        .unwrap_or_else(chrono::Utc::now);
                     return reset_time.format("%Y-%m-%d %H:%M:%S UTC").to_string();
                 }
             }
@@ -253,7 +253,7 @@ impl GitHubClient {
                     limit: rate_limit.resources.search.limit,
                     remaining: rate_limit.resources.search.remaining,
                     reset_at: chrono::DateTime::from_timestamp(rate_limit.resources.search.reset, 0)
-                        .unwrap_or_else(|| chrono::Utc::now()),
+                        .unwrap_or_else(chrono::Utc::now),
                 })
             }
             status => {

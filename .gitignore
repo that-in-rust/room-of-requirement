@@ -1,41 +1,398 @@
-# Dependencies
-node_modules/
+# =============================================================================
+# RUST APPLICATION .GITIGNORE
+# =============================================================================
+
+# Rust build artifacts and compilation outputs
+/target/
+**/target/
+**/*.rs.bk
+*.pdb
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Cargo files and registry
+Cargo.lock
+.cargo/
+.cargo/config
+.cargo/config.toml
+.cargo/credentials
+.cargo/credentials.toml
+
+# Rust-specific temporary files
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+.#*
+\#*#
+
+# Rust documentation builds
+/doc/
+/docs/target/
+
+# Rust benchmarking and profiling
+/benches/target/
+*.profraw
+perf.data*
+flamegraph.svg
+*.svg
+
+# =============================================================================
+# SECURITY - TOKENS, KEYS, AND CREDENTIALS
+# =============================================================================
+
+# Environment files (CRITICAL - contains API tokens)
+.env
+.env.*
+!.env.example
+!.env.template
+.envrc
+
+# API tokens and keys
+*token*
+*key*
+*secret*
+*credential*
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# GitHub tokens specifically
+github_token
+github_token.txt
+.github_token
+GITHUB_TOKEN
+
+# Database credentials
+database.url
+db_url
+DATABASE_URL
+postgres_url
+POSTGRES_URL
+
+# SSH keys
+id_rsa
+id_ed25519
+id_ecdsa
+*.key
+*.pub
+known_hosts
+
+# GPG keys
+*.gpg
+*.asc
+secring.*
+pubring.*
+
+# OAuth and JWT tokens
+*.jwt
+oauth_token
+access_token
+refresh_token
+
+# Cloud provider credentials
+.aws/
+.gcp/
+.azure/
+gcloud/
+aws-credentials
+azure-credentials
+
+# =============================================================================
+# BASH SCRIPTS AND SHELL ENVIRONMENT
+# =============================================================================
+
+# Bash history and shell files
+.bash_history
+.zsh_history
+.fish_history
+.history
+
+# Shell configuration with potential secrets
+.bashrc.local
+.zshrc.local
+.profile.local
+
+# Script outputs and logs
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+*.out
+*.err
+script_output/
+logs/
+
+# Bash script temporary files
+*.sh.tmp
+*.bash.tmp
+script_temp/
+
+# Process IDs and lock files
+*.pid
+*.lock
+
+# =============================================================================
+# DATABASE AND DATA FILES
+# =============================================================================
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# PostgreSQL dumps
+*.sql
+*.dump
+pg_dump_*
+database_backup*
+
+# Data exports and imports
+data_export/
+data_import/
+*.csv.backup
+*.json.backup
+
+# Migration artifacts
+migration_backup/
+schema_backup/
+
+# =============================================================================
+# BUILD AND DEPLOYMENT
+# =============================================================================
+
+# Docker secrets and configs
+docker-compose.override.yml
+.dockerignore.local
+Dockerfile.local
+
+# Kubernetes secrets
+*-secret.yaml
+*-secret.yml
+secrets/
+
+# Deployment configurations
+deploy.local.yml
+config.local.toml
+settings.local.json
 
 # Build outputs
 dist/
 build/
+release/
+debug/
 *.tgz
 *.tar.gz
+*.zip
+*.deb
+*.rpm
 
-# Environment files
-.env
-.env.local
-.env.*.local
+# =============================================================================
+# DEVELOPMENT TOOLS AND IDEs
+# =============================================================================
 
-# IDE files
+# Visual Studio Code
 .vscode/
+!.vscode/settings.json.example
+!.vscode/launch.json.example
+!.vscode/tasks.json.example
+
+# IntelliJ IDEA / CLion
 .idea/
+*.iml
+*.ipr
+*.iws
+
+# Vim/Neovim
 *.swp
 *.swo
 *~
+.netrwhist
+Session.vim
 
-# OS generated files
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# =============================================================================
+# OPERATING SYSTEM FILES
+# =============================================================================
+
+# macOS
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
+.fseventsd
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
 Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
 
-# Downloads folder (bulky unhelpful files)
-downloads/
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
 
-# Temporary files
+# =============================================================================
+# TEMPORARY AND CACHE FILES
+# =============================================================================
+
+# General temporary files
 *.tmp
 *.temp
+*.bak
+*.backup
+*.old
+*.orig
+temp/
+tmp/
+cache/
 .cache/
+
+# Node.js (if using for tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# Python (if using for tooling)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+
+# =============================================================================
+# PROJECT-SPECIFIC EXCLUSIONS
+# =============================================================================
+
+# GitHub PostgreSQL Query Tool specific
+github_data/
+query_results/
+exported_data/
+test_data/
+sample_repos/
+
+# Generated documentation
+book/
+mdbook-output/
+
+# Performance and profiling data
+*.perf
+*.prof
+*.trace
+benchmarks/results/
+
+# Test artifacts
+test_output/
+coverage/
+*.gcda
+*.gcno
+*.info
+
+# =============================================================================
+# SECURITY SCANNING AND COMPLIANCE
+# =============================================================================
+
+# Security scan results
+security_scan_results/
+vulnerability_report*
+audit_results/
+
+# Compliance artifacts
+compliance_report*
+security_audit*
+
+# =============================================================================
+# BACKUP AND RECOVERY
+# =============================================================================
+
+# Backup files
+*.backup
+backup_*
+*_backup
+*.bak
+recovery_*
+
+# Archive files
+*.tar
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.zip
+*.7z
+*.rar
+
+# =============================================================================
+# MONITORING AND LOGGING
+# =============================================================================
+
+# Application logs
+*.log
+logs/
+log/
+application.log*
+error.log*
+access.log*
+debug.log*
+
+# Monitoring data
+metrics/
+monitoring/
+telemetry/
+
+# =============================================================================
+# CONFIGURATION OVERRIDES
+# =============================================================================
+
+# Local configuration overrides
+config.local.*
+settings.local.*
+*.local.toml
+*.local.json
+*.local.yaml
+*.local.yml
+
+# User-specific configurations
+.user_config
+user_settings.*
