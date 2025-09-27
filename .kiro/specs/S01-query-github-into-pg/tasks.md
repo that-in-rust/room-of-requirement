@@ -47,7 +47,7 @@
   - Handle graceful shutdown and cleanup
   - _Requirements: 1.1, 1.2, 1.3, 2.1, 2.2, 2.3_
 
-- [-] 7. Add comprehensive testing suite
+- [x] 7. Add comprehensive testing suite
   - Write unit tests for all modules with proper mocking
   - Create integration tests for database operations
   - Add end-to-end CLI tests with test containers
@@ -55,7 +55,7 @@
   - Add performance tests for large result sets
   - _Requirements: 1.5, 2.1, 2.2_
 
-- [ ] 8. Create documentation and examples
+- [-] 8. Create documentation and examples
   - Write comprehensive README with setup instructions
   - Add example GitHub search queries and expected outputs
   - Document environment variable configuration
