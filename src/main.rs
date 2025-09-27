@@ -1,9 +1,61 @@
+//! # GitHub PostgreSQL Query Tool
+//! 
+//! A command-line tool that executes GitHub API search queries and stores
+//! the results in timestamped PostgreSQL tables.
+//! 
+//! ## Features
+//! 
+//! - Supports any valid GitHub repository search query
+//! - Creates timestamped tables with format `repos_YYYYMMDDHHMMSS`
+//! - Handles duplicate repositories with upsert operations
+//! - Tracks query metadata and performance metrics
+//! - Provides comprehensive error handling and progress indicators
+//! - Supports dry-run mode for configuration validation
+//! 
+//! ## Usage
+//! 
+//! ```bash
+//! # Basic usage
+//! github-pg-query "language:rust stars:>1000"
+//! 
+//! # With pagination
+//! github-pg-query "user:octocat" --per-page 50 --page 2
+//! 
+//! # Verbose output
+//! github-pg-query "topic:machine-learning" --verbose
+//! 
+//! # Dry run (validate only)
+//! github-pg-query "created:>2023-01-01" --dry-run
+//! ```
+//! 
+//! ## Environment Variables
+//! 
+//! - `GITHUB_TOKEN`: GitHub personal access token (required)
+//! - `DATABASE_URL`: PostgreSQL connection string (required)
+//! 
+//! ## Examples
+//! 
+//! See `EXAMPLES.md` for comprehensive query examples and `SETUP.md` for
+//! detailed setup instructions.
+
 use github_pg_query::{
     CliConfig, DatabaseManager, GitHubClient, ProgressIndicator, 
     QueryMetadata, Result
 };
 use std::time::Instant;
 
+/// Main entry point for the GitHub PostgreSQL Query tool.
+/// 
+/// This function orchestrates the complete workflow:
+/// 1. Loads environment variables from .env file if present
+/// 2. Parses and validates CLI arguments
+/// 3. Handles dry-run mode for configuration validation
+/// 4. Executes the main search and storage workflow
+/// 
+/// # Error Handling
+/// 
+/// All errors are handled gracefully with user-friendly messages.
+/// The application exits with code 1 on any error.
 #[tokio::main]
 async fn main() {
     // Load environment variables from .env file if it exists
@@ -39,7 +91,27 @@ async fn main() {
     }
 }
 
-/// Validate configuration in dry run mode
+/// Validates configuration in dry-run mode without executing queries.
+/// 
+/// This function performs comprehensive validation of:
+/// - GitHub token validity and permissions
+/// - Database connectivity and accessibility
+/// - Search query format and syntax
+/// 
+/// # Arguments
+/// 
+/// * `config` - The parsed CLI configuration to validate
+/// 
+/// # Returns
+/// 
+/// * `Ok(())` if all validations pass
+/// * `Err(AppError)` if any validation fails
+/// 
+/// # Example
+/// 
+/// ```bash
+/// github-pg-query "language:rust" --dry-run
+/// ```
 async fn validate_dry_run(config: &CliConfig) -> Result<()> {
     let progress = ProgressIndicator::new("Dry run validation".to_string(), config.verbose);
     progress.start();
@@ -64,7 +136,36 @@ async fn validate_dry_run(config: &CliConfig) -> Result<()> {
     Ok(())
 }
 
-/// Execute the complete search and storage workflow
+/// Executes the complete search and storage workflow.
+/// 
+/// This function orchestrates the main application workflow:
+/// 1. Initializes GitHub client with authentication
+/// 2. Establishes database connection and creates table
+/// 3. Executes GitHub search query with pagination
+/// 4. Stores repository data with conflict handling
+/// 5. Records query metadata for tracking and analysis
+/// 
+/// # Arguments
+/// 
+/// * `config` - The validated CLI configuration
+/// 
+/// # Returns
+/// 
+/// * `Ok(())` if the workflow completes successfully
+/// * `Err(AppError)` if any step fails
+/// 
+/// # Workflow Steps
+/// 
+/// 1. **GitHub Client**: Creates authenticated client with rate limiting
+/// 2. **Database Setup**: Connects and creates timestamped table
+/// 3. **Search Execution**: Queries GitHub API with specified parameters
+/// 4. **Data Storage**: Inserts repositories with duplicate handling
+/// 5. **Metadata Tracking**: Records query statistics and performance
+/// 
+/// # Error Handling
+/// 
+/// Errors at any step are propagated with context. Failed queries
+/// are recorded in the query history for analysis.
 async fn execute_search_workflow(config: &CliConfig) -> Result<()> {
     let start_time = Instant::now();
     

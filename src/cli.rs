@@ -1,10 +1,43 @@
+//! # Command Line Interface Module
+//! 
+//! This module provides CLI argument parsing, configuration management,
+//! and progress indication functionality for the GitHub PostgreSQL Query tool.
+//! 
+//! ## Key Components
+//! 
+//! - [`CliConfig`]: Configuration structure with validation
+//! - [`ProgressIndicator`]: User-friendly progress feedback
+//! - Environment variable handling and validation
+//! - Comprehensive error reporting with actionable suggestions
+
 use clap::{Arg, ArgMatches, Command};
 use std::env;
 use std::io::{self, Write};
 
 use crate::{AppError, Result};
 
-/// CLI configuration and argument parsing
+/// CLI configuration structure containing all parsed and validated arguments.
+/// 
+/// This structure holds all configuration needed to execute a GitHub search
+/// query, including authentication tokens, database connection details,
+/// search parameters, and execution options.
+/// 
+/// # Fields
+/// 
+/// * `search_query` - GitHub repository search query string
+/// * `github_token` - GitHub API authentication token
+/// * `database_url` - PostgreSQL connection string
+/// * `per_page` - Number of results per page (1-100)
+/// * `page` - Page number to retrieve (starts from 1)
+/// * `verbose` - Enable detailed progress output
+/// * `dry_run` - Validate configuration without executing
+/// 
+/// # Example
+/// 
+/// ```rust
+/// let config = CliConfig::parse()?;
+/// println!("Searching for: {}", config.search_query);
+/// ```
 #[derive(Debug, Clone)]
 pub struct CliConfig {
     /// GitHub search query
@@ -23,7 +56,27 @@ pub struct CliConfig {
     pub dry_run: bool,
 }
 
-/// Progress indicator for CLI operations
+/// Progress indicator for providing user-friendly feedback during operations.
+/// 
+/// This structure manages progress indication with different output modes:
+/// - **Verbose mode**: Shows detailed step-by-step progress
+/// - **Normal mode**: Shows concise progress with status updates
+/// 
+/// # Features
+/// 
+/// - Start/update/complete progress indication
+/// - Success, error, warning, and info message types
+/// - Automatic formatting with emoji indicators
+/// - Verbose and normal output modes
+/// 
+/// # Example
+/// 
+/// ```rust
+/// let progress = ProgressIndicator::new("Connecting to database".to_string(), verbose);
+/// progress.start();
+/// progress.update("Establishing connection pool");
+/// progress.success("Database connected successfully");
+/// ```
 pub struct ProgressIndicator {
     message: String,
     verbose: bool,
@@ -84,7 +137,30 @@ impl ProgressIndicator {
 }
 
 impl CliConfig {
-    /// Parse command line arguments and environment variables
+    /// Parses command line arguments and environment variables.
+    /// 
+    /// This method creates a complete CLI configuration by:
+    /// 1. Parsing command line arguments using clap
+    /// 2. Reading environment variables for tokens and database URL
+    /// 3. Validating all configuration values
+    /// 4. Applying defaults where appropriate
+    /// 
+    /// # Returns
+    /// 
+    /// * `Ok(CliConfig)` - Successfully parsed and validated configuration
+    /// * `Err(AppError)` - Configuration parsing or validation failed
+    /// 
+    /// # Environment Variables
+    /// 
+    /// - `GITHUB_TOKEN`: GitHub personal access token (required if not provided via --github-token)
+    /// - `DATABASE_URL`: PostgreSQL connection string (required if not provided via --database-url)
+    /// 
+    /// # Example
+    /// 
+    /// ```rust
+    /// let config = CliConfig::parse()?;
+    /// println!("Query: {}", config.search_query);
+    /// ```
     pub fn parse() -> Result<Self> {
         let matches = Self::build_cli().get_matches();
         Self::from_matches(&matches)
