@@ -22,7 +22,7 @@
   - Add unit tests with mock HTTP responses
   - _Requirements: 1.1, 1.4, 1.5_
 
-- [ ] 4. Create database operations module
+- [x] 4. Create database operations module
   - Implement PostgreSQL connection management with sqlx
   - Create function to generate timestamped table names (repos_YYYYMMDDHHMMSS)
   - Add dynamic table creation based on repository schema
@@ -31,7 +31,7 @@
   - Add database integration tests
   - _Requirements: 1.2, 1.3_
 
-- [ ] 5. Build CLI interface and argument parsing
+- [-] 5. Build CLI interface and argument parsing
   - Create CLI struct with clap for argument parsing
   - Add search query parameter and validation
   - Implement environment variable validation (GITHUB_TOKEN, DATABASE_URL)
